@@ -1,0 +1,51 @@
+div
+  .container
+    - flash.each do |type, msg|
+      - if type == "error"
+        .alert.alert-danger
+          = msg
+      - else
+        .alert.alert-info
+          = msg
+    = link_to "Crawl data", crawl_path, class: "btn btn-success mt-2 mb-2 form-control"
+    = link_to "Export data", export_csv_companies_path(format: :csv), class: "btn btn-info mb-3 form-control"
+
+    .form-group= form_tag import_csv_companies_path, method: :post, multipart: true do
+      .form-horizontal
+        .form-group
+          .col-md-4
+            = file_field_tag :registration_sheet, class: 'form-control'
+          input.btn.btn-danger type="submit" value="Import data"
+    .form-group= form_tag import_job_csv_companies_path, method: :post, multipart: true do
+      .form-horizontal
+        .form-group
+          .col-md-4
+            = file_field_tag :registration_sheet, class: 'form-control'
+          input.btn.btn-danger type="submit" value="Import data from job"
+
+
+    .form-group= form_tag(search_path, method: "get") do
+      input.form-control.input-search type="text" id="q" name="q"
+      input.btn.btn-info type="submit" value="Search"
+    = paginate @companies, theme: 'twitter-bootstrap-4'
+    - @companies.each do |company|
+      .searches__result__list
+        .searches__result__list__header
+          h4.searches__result__list__header__title
+            = company.name
+          ul.searches__result__list__header__tag
+            li.searches__tag.searches__tag--listed
+              = company.type_company
+        .searches__result__list__conts
+          .searches__result__list__conts__thumb
+            img data-src="#{company.avatar}" width= "100%"
+          .searches__result__list__conts__text
+            h5.searches__result__list__conts__text__heading
+              = company.title
+            p.searches__result__list__conts__text__excerpt
+              = company.content
+            p.searches__result__list__conts__text__address
+              = company.address
+        .d-flex
+          = link_to "Delete", company_path(id: company.id), method: "DELETE", class: "mr-2 mt-3 btn btn-danger"
+    .text-center = paginate @companies, theme: 'twitter-bootstrap-4'

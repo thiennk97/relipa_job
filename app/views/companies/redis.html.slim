@@ -1,0 +1,26 @@
+div
+  .container
+    = link_to "Crawl data", crawl_path, class: "btn btn-success mt-2 mb-3 form-control"
+    .form-group= form_tag(companies_path, method: "get") do
+      input.form-control.input-search type="text" id="q" name="q"
+      input.btn.btn-info type="submit"
+    - @companies.each do |company|
+      .searches__result__list
+        .searches__result__list__header
+          h4.searches__result__list__header__title
+            = company["name"]
+          ul.searches__result__list__header__tag
+            li.searches__tag.searches__tag--listed
+              = company["type_company"]
+        .searches__result__list__conts
+          .searches__result__list__conts__thumb
+            img data-src="#{company["avatar"]}" width= "100%"
+          .searches__result__list__conts__text
+            h5.searches__result__list__conts__text__heading
+              = company["title"]
+            p.searches__result__list__conts__text__excerpt
+              = company["content"]
+            p.searches__result__list__conts__text__address
+              = company["address"]
+        .d-flex
+          = link_to "Delete", company_path(id: company["id"]), method: "DELETE", class: "mr-2 mt-3 btn btn-danger"
